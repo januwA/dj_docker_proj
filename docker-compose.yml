@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    expose:
+      - ${POSTGRES_PORT}
+    volumes:
+      - ./pgdb/data/db:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+
+  someredis:
+    image: redis:6.2.6-alpine
+    env_file:
+      - ./.env
+    expose:
+      - ${REDIS_PORT}
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf:/usr/local/etc/redis
+
+  somerabbitmq:
+    image: rabbitmq:3.9.12-management-alpine
+    env_file:
+      - ./.env
+    expose:
+      - ${RABBITMQ_PORT}
+      - ${RABBITMQ_MANAGE_PORT}
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/conf:/etc/rabbitmq/
+
+  dj:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./proj:/proj
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - someredis
+      - somerabbitmq
+
+  worker:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A proj worker -l INFO
+    volumes:
+      - ./proj:/proj
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - someredis
+      - somerabbitmq

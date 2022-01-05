@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+  someredis:
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+  somerabbitmq:
+    ports:
+      - ${RABBITMQ_MANAGE_PORT}:${RABBITMQ_MANAGE_PORT}
+
+  dj:
+    command: /scripts/dev.sh
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+    environment:
+      DJANGO_DEBUG: '1'
+
+  worker:
+    command: celery -A proj worker -l INFO
+    environment:
+      DJANGO_DEBUG: '1'
+
