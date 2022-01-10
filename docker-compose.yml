@@ -6,19 +6,21 @@ services:
     expose:
       - ${POSTGRES_PORT}
     volumes:
-      - ./pgdb/data/db:/var/lib/postgresql/data
+      - ./docker/pgdb/data:/var/lib/postgresql/data
     env_file:
       - ./.env
 
   someredis:
-    image: redis:6.2.6-alpine
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
     env_file:
       - ./.env
     expose:
       - ${REDIS_PORT}
     volumes:
-      - ./redis/data:/data
-      - ./redis/conf:/usr/local/etc/redis
+      - ./docker/redis/data:/data
+      - ./docker/redis/conf:/usr/local/etc/redis
 
   somerabbitmq:
     image: rabbitmq:3.9.12-management-alpine
@@ -28,8 +30,8 @@ services:
       - ${RABBITMQ_PORT}
       - ${RABBITMQ_MANAGE_PORT}
     volumes:
-      - ./rabbitmq/data:/var/lib/rabbitmq
-      - ./rabbitmq/conf:/etc/rabbitmq/
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/conf:/etc/rabbitmq/
 
   dj:
     build:

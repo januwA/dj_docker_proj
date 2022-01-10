@@ -1,10 +1,10 @@
 proj/djstatic
 proj/djmedia
 
-redis/data
-pgdb/data
-rabbitmq/data
-proj/media
+docker/nginx/logs
+docker/redis/data
+docker/pgdb/data
+docker/rabbitmq/data
 
 
 # Byte-compiled / optimized / DLL files

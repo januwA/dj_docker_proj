@@ -30,40 +30,6 @@ $ docker-compose logs
 
 使用时去掉`.gitignore`中的`proj/djstatic`配置
 
-## 文件
-```
-|-- .env                        docker compose 环境变量
-|-- .git
-|-- .gitignore
-|-- app 前端静态文件
-|   |-- .gitkeep
-|   `-- index.html
-|-- docker-compose.override.yml 开发配置
-|-- docker-compose.prod.yml     线上配置
-|-- docker-compose.yml          基础配置
-|-- Dockerfile
-|-- nginx                       nginx配置
-|   `-- conf.d
-|       `-- django.conf        
-|-- pgdb                        pgdb配置
-|   |-- .gitkeep
-|   `-- data
-|-- proj                        django项目文件
-|-- rabbitmq                    rabbitmq配置
-|   |-- .gitkeep
-|   |-- conf
-|   |   |-- enabled_plugins
-|   |   `-- rabbitmq.conf
-|   `-- data
-|-- README.md
-|-- redis                       redis配置
-|   |-- .gitkeep
-|   |-- conf
-|   |   `-- redis.conf
-|   `-- data
-`-- requirements.txt            django项目依赖
-```
-
 ## 查看正在运行的容器
 ```sh
 docker-compose ps

@@ -197,18 +197,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'djstatic/'
+STATIC_DIR = os.path.join(BASE_DIR, STATIC_URL)
 
 # STATICFILES_DIRS 和 STATIC_ROOT 不能同时存在
 # STATICFILES_DIRS 配置来至 staticfiles 应用程序，只能在DEBUG模式中使用
 if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / "djstatic"]
+    STATICFILES_DIRS = [STATIC_DIR]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'djstatic')
+    STATIC_ROOT = STATIC_DIR
+os.makedirs(STATIC_DIR, exist_ok=True)
 
 # 用户上传的文件
-MEDIA_URL = '/djmedia/'
-MEDIA_ROOT = BASE_DIR / "djmedia"
-
+MEDIA_URL = 'djmedia/'
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
+os.makedirs(MEDIA_ROOT, exist_ok=True)
+    
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
