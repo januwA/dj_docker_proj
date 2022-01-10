@@ -8,11 +8,6 @@ services:
     environment:
       DJANGO_DEBUG: '0'
 
-  worker:
-    command: celery -A proj worker -l ERROR
-    environment:
-      DJANGO_DEBUG: '0'
-
   nginx:
     image: nginx:1.21.5-alpine
     working_dir: /app

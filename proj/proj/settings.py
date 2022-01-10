@@ -145,12 +145,12 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://someredis:{os.environ.get("REDIS_PORT")}/1',
+        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/1',
         'VERSION': 1,  # 缓存密钥版本号
     },
     'sessions': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://someredis:{os.environ.get("REDIS_PORT")}/2',
+        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/2',
         'VERSION': 1,
     }
 }
@@ -159,7 +159,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [f'redis://someredis:{os.environ.get("REDIS_PORT")}/3']
+            "hosts": [f'redis://redis:{os.environ.get("REDIS_PORT")}/3']
         },
     },
 }

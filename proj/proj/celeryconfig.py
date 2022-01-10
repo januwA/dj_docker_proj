@@ -5,10 +5,10 @@ from pathlib import Path
 main_name = Path(__file__).parent.name
 
 # 使用 RabbitMQ 作为消息代理人
-broker_url = f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASS')}@somerabbitmq:{os.environ.get('RABBITMQ_PORT')}//"
+broker_url = f"amqp://{os.environ.get('RABBITMQ_USER')}:{os.environ.get('RABBITMQ_PASS')}@rabbitmq:{os.environ.get('RABBITMQ_PORT')}//"
 
 # 使用 Redis 作为结果后端
-result_backend = f'redis://someredis:{os.environ.get("REDIS_PORT")}/0'
+result_backend = f'redis://redis:{os.environ.get("REDIS_PORT")}/0'
 
 
 # 工作线程启动时要导入的模块序列

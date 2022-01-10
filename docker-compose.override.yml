@@ -5,11 +5,11 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
 
-  someredis:
+  redis:
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
 
-  somerabbitmq:
+  rabbitmq:
     ports:
       - ${RABBITMQ_MANAGE_PORT}:${RABBITMQ_MANAGE_PORT}
 
@@ -19,9 +19,3 @@ services:
       - ${DJANGO_PORT}:${DJANGO_PORT}
     environment:
       DJANGO_DEBUG: '1'
-
-  worker:
-    command: celery -A proj worker -l INFO
-    environment:
-      DJANGO_DEBUG: '1'
-

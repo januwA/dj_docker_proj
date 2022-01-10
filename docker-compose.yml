@@ -10,7 +10,7 @@ services:
     env_file:
       - ./.env
 
-  someredis:
+  redis:
     build:
       context: ./docker/redis
       dockerfile: Dockerfile
@@ -22,7 +22,7 @@ services:
       - ./docker/redis/data:/data
       - ./docker/redis/conf:/usr/local/etc/redis
 
-  somerabbitmq:
+  rabbitmq:
     image: rabbitmq:3.9.12-management-alpine
     env_file:
       - ./.env
@@ -39,24 +39,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./proj:/proj
+      - ./docker/celery/pids:/var/run/celery
+      - ./docker/celery/logs:/var/log/celery
     env_file:
       - ./.env
     depends_on:
       - db
-      - someredis
-      - somerabbitmq
-
-  worker:
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: celery -A proj worker -l INFO
-    volumes:
-      - ./proj:/proj
-    env_file:
-      - ./.env
-    depends_on:
-      - db
-      - someredis
-      - somerabbitmq
+      - redis
+      - rabbitmq
