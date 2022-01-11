@@ -6,8 +6,13 @@ from asgiref.sync import async_to_sync
 from django.shortcuts import render, HttpResponse
 from channels.layers import get_channel_layer
 
+from rest_framework import viewsets
+from .models import FileDemo
+from .serializers import FileDemoSerializer
+
 # 指定记录器发送日志消息
 logger = logging.getLogger('django')
+
 
 def celery_task_demo(request):
     logger.info('发送异步消息')
@@ -35,6 +40,12 @@ def chat_global_send(request):
     })
     return HttpResponse('已发送全局消息')
 
+
 def prod_errorlog(request):
     logger.error('记录错误消息')
     return HttpResponse('ok')
+
+
+class FileDemoViewSet(viewsets.ModelViewSet):
+    queryset = FileDemo.objects.all()
+    serializer_class = FileDemoSerializer

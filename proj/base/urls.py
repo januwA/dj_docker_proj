@@ -1,5 +1,10 @@
 from django.urls import re_path, include
+from rest_framework import routers
+
 from . import views
+
+router = routers.SimpleRouter(trailing_slash=False)
+router.register(r"files/?", views.FileDemoViewSet)
 
 urlpatterns = [
     re_path(r'celery_task_demo/?', views.celery_task_demo,
@@ -11,4 +16,5 @@ urlpatterns = [
         re_path('', views.chat_index, name='chat_index'),
         re_path(r'<str:room_name>/?', views.chat_room, name='chat_room'),
     ])),
+    re_path("", include(router.urls)),
 ]

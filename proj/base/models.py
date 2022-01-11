@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from django.utils import timezone
 from django.db import models
 
 
@@ -19,3 +20,6 @@ class FileDemo(models.Model):
         null=True, blank=True, editable=False, default=100)
     image_width = models.PositiveSmallIntegerField(
         null=True, blank=True, editable=False, default=100)
+
+    create_at = models.DateTimeField(default=timezone.now)
+    update_at = models.DateTimeField(auto_now=True)

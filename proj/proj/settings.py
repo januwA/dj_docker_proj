@@ -49,46 +49,74 @@ INSTALLED_APPS = [
     "base",
 ]
 
+# DRF 配置
+# https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    # 使用JWT验证
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
+    # 使用JWT身份验证
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     # 自定义分页
     "DEFAULT_PAGINATION_CLASS": "proj.pagination.PageLimitNumberPagination",
     # 查询过滤 https://www.django-rest-framework.org/api-guide/filtering/
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    # SearchFilter 查询参数的名称
+    "SEARCH_PARAM": "search",
+    # OrderingFilter 查询参数的名称
+    "ORDERING_PARAM": "ordering",
+    # request.version 不存在版本控制信息时应使用的值
+    # https://www.django-rest-framework.org/api-guide/versioning/
+    "DEFAULT_VERSION": None,
+    "VERSION_PARAM": "version",
+    # 版本控制方案，默认None
+    'DEFAULT_VERSIONING_CLASS': None,
+    # 内部集成方法映射为REST方法
+    "SCHEMA_COERCE_METHOD_NAMES": {'retrieve': 'read', 'destroy': 'delete'},
+    # DateTimeField 字段的格式化
+    "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
+    # DateField 字段格式化
+    "DATE_FORMAT": "%Y-%m-%d",
 }
 
+# JWT 配置
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html#algorithm
 SIMPLE_JWT = {
     # access_token有效时间
     "ACCESS_TOKEN_LIFETIME": timedelta(days=60) if DEBUG else timedelta(hours=2),
     # refresh_token有效时间
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
     # 在跟新access_token时，同时返回新的refresh_token
-    "ROTATE_REFRESH_TOKENS": True,
+    "ROTATE_REFRESH_TOKENS": False,
     # 将旧的refresh_token加入黑名单
-    "BLACKLIST_AFTER_ROTATION": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    # 更新最后一次登录时间
     "UPDATE_LAST_LOGIN": True,
+
+    # 对token执行签名/验证操作算法
     "ALGORITHM": "HS256",
     "VERIFYING_KEY": None,
     "AUDIENCE": None,
     "ISSUER": None,
     "JWK_URL": None,
     "LEEWAY": 0,
+
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    # 用户模型中的PK字段
     "USER_ID_FIELD": "id",
+    # token中携带的用户标识
     "USER_ID_CLAIM": "user_id",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
+
     "JTI_CLAIM": "jti",
+
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
+# 中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -155,6 +183,7 @@ CACHES = {
     }
 }
 
+# ws 配置
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -187,9 +216,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
+# 本次安装的语言代码的字符串, USE_I18N=True才有效
 LANGUAGE_CODE = 'zh-Hans'
+# 时区的字符串
 TIME_ZONE = 'Asia/Shanghai'
+# 启用 Django 的翻译系统
 USE_I18N = True
+# 使用时区感知
 USE_TZ = True
 
 
@@ -211,7 +244,7 @@ os.makedirs(STATIC_DIR, exist_ok=True)
 MEDIA_URL = 'djmedia/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 os.makedirs(MEDIA_ROOT, exist_ok=True)
-    
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
