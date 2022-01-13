@@ -6,6 +6,7 @@ services:
     expose:
       - ${POSTGRES_PORT}
     volumes:
+      - ./docker/pgdb/conf/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./docker/pgdb/data:/var/lib/postgresql/data
     env_file:
       - ./.env
