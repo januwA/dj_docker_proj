@@ -9,7 +9,9 @@ services:
       DJANGO_DEBUG: '0'
 
   nginx:
-    image: nginx:1.21.5-alpine
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
     working_dir: /app
     ports:
       - ${DJANGO_PORT}:80

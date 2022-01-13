@@ -28,8 +28,6 @@ docker-compose run nginx nginx -s reload
 $ docker-compose logs
 ```
 
-使用时去掉`.gitignore`中的`proj/djstatic`配置
-
 ## 查看正在运行的容器
 ```sh
 docker-compose ps
