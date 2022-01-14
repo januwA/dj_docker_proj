@@ -118,6 +118,9 @@ SIMPLE_JWT = {
 
 # 中间件
 MIDDLEWARE = [
+    # 缓存整个站点
+    'django.middleware.cache.UpdateCacheMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -125,6 +128,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 缓存整个站点
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'proj.urls'
@@ -171,24 +177,38 @@ DATABASES = {
 # redis 缓存配置
 # https://docs.djangoproject.com/zh-hans/4.0/topics/cache/#redis
 CACHES = {
+    # django 默认缓存
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/1',
+        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}',
+
+        # 缓存的默认超时时间，以秒为单位,默认为 300 秒（5 分钟）
+        # 这个过期时间在使用底层缓存 API时，作为缺省值提供
+        # cache.set("ajanuw", 1)    过期时间为 TIMEOUT
+        # cache.set("age", 1, 10)   10s过期
+        'TIMEOUT': timedelta(minutes=5).seconds,
+
         'VERSION': 1,  # 缓存密钥版本号
     },
     'sessions': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/2',
+        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/13',
         'VERSION': 1,
     }
 }
 
+# 缓存中间件使用哪个缓存
+CACHE_MIDDLEWARE_ALIAS = 'default'
+# 缓存中间件缓存页面的过期时间
+CACHE_MIDDLEWARE_SECONDS = timedelta(minutes=6).seconds
+
 # ws 配置
+# https://channels.readthedocs.io/en/stable/topics/channel_layers.html#redis-channel-layer
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [f'redis://redis:{os.environ.get("REDIS_PORT")}/3']
+            "hosts": [f'redis://redis:{os.environ.get("REDIS_PORT")}/14']
         },
     },
 }
