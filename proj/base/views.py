@@ -16,7 +16,7 @@ logger = logging.getLogger('django')
 
 def celery_task_demo(request):
     logger.info('发送异步消息')
-    add.apply_async(args=(1, 2))
+    add.apply_async(args=(1, 2), ignore_result=False)
     return HttpResponse('ok')
 
 
