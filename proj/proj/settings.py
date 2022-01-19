@@ -180,7 +180,7 @@ CACHES = {
     # django 默认缓存
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}',
+        'LOCATION': f'redis://{os.environ.get("REDIS_USER")}:{os.environ.get("REDIS_PASS")}@redis:{os.environ.get("REDIS_PORT")}',
 
         # 缓存的默认超时时间，以秒为单位,默认为 300 秒（5 分钟）
         # 这个过期时间在使用底层缓存 API时，作为缺省值提供
@@ -192,7 +192,7 @@ CACHES = {
     },
     'sessions': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://redis:{os.environ.get("REDIS_PORT")}/13',
+        'LOCATION': f'redis://{os.environ.get("REDIS_USER")}:{os.environ.get("REDIS_PASS")}@redis:{os.environ.get("REDIS_PORT")}/13',
         'VERSION': 1,
     }
 }
@@ -208,7 +208,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [f'redis://redis:{os.environ.get("REDIS_PORT")}/14']
+            "hosts": [f'redis://{os.environ.get("REDIS_USER")}:{os.environ.get("REDIS_PASS")}@redis:{os.environ.get("REDIS_PORT")}/14']
         },
     },
 }

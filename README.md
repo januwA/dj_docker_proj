@@ -47,10 +47,3 @@ docker-compose down -v
 ```sh
 docker-compose exec dj bash
 ```
-
-## 将容器文件拷贝到主机
-```sh
-docker cp 容器id:容器路径 本机路径
-
-docker cp d27a5a75ae54:/var/a.txt ./
-```
