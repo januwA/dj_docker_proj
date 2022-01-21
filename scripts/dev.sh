@@ -1,13 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 sleep 10s
 
 # celery worker
 celery multi start 1 -A proj -l INFO -c4 \
-  --pidfile="/var/run/celery/%n.pid" \
-  --logfile="/var/log/celery/%n%I.log"
-
-celery multi start 2 -A proj -l INFO -c4 \
   --pidfile="/var/run/celery/%n.pid" \
   --logfile="/var/log/celery/%n%I.log"
 # celery multi restart 1 --pidfile=/var/run/celery/%n.pid
