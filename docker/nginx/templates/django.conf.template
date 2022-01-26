@@ -1,8 +1,11 @@
 # 示例配置
 # https://nginx.org/en/docs/example.html
+# 
+# 在 nginx 配置中使用环境变量 
+# https://hub.docker.com/_/nginx
 
 upstream django {
-  server dj:8000;
+  server dj:${DJANGO_PORT};
 }
 
 # 格式化log

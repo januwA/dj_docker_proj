@@ -15,8 +15,10 @@ services:
     working_dir: /app
     ports:
       - ${DJANGO_PORT}:80
+    env_file:
+      - ./.env
     volumes:
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/templates:/etc/nginx/templates
       - ./docker/nginx/app:/app
       - ./docker/nginx/logs:/var/log/nginx
       - ./proj/djstatic:/var/djstatic
