@@ -321,10 +321,10 @@ if DEBUG:
         'loggers': {
             # 配置记录器，将记录发送到处理程序
             # https://docs.djangoproject.com/zh-hans/4.0/ref/logging/#loggers
-            'django.db.backends': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-            },
+            # 'django.db.backends': {
+            #     'level': 'DEBUG',
+            #     'handlers': ['console'],
+            # },
 
             # 处理来自所有记录器的记录
             # '': {

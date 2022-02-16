@@ -15,11 +15,16 @@ $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 
 ## 在容器内运行脚本
 ```sh
-docker-compose run dj python manage.py startapp base
 docker-compose run dj python manage.py makemigrations
 docker-compose run dj python manage.py migrate
+
 docker-compose run dj python manage.py createsuperuser
+
+docker-compose run dj python manage.py startapp base
+
 docker-compose run dj python manage.py collectstatic --noinput
+
+# 热重启nginx
 docker-compose run nginx nginx -s reload
 ```
 

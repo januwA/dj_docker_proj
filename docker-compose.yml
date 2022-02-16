@@ -5,6 +5,7 @@ services:
     image: postgres:14.1-alpine
     expose:
       - ${POSTGRES_PORT}
+    working_dir: /var/lib/postgresql/data
     volumes:
       - ./docker/pgdb/conf/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./docker/pgdb/data:/var/lib/postgresql/data
