@@ -6,12 +6,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /proj
 
-COPY ./requirements.txt /
+COPY ./proj/* /proj/
 
 # 创建镜像时执行
 RUN python -m pip install --upgrade pip
-RUN pip install -r /requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-COPY ./proj/* /proj/
+RUN pip install -r /proj/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY ./scripts /scripts
 RUN chmod 777 /scripts/*

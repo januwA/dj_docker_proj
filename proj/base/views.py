@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth.models import update_last_login
 from proj.tasks import add
 from asgiref.sync import async_to_sync
@@ -87,9 +87,9 @@ def chat_global_send(request):
     return HttpResponse('已发送全局消息')
 
 
-def prod_errorlog(request):
+def errlog(request: Request):
     logger.error('记录错误消息')
-    return HttpResponse('ok')
+    return JsonResponse({"msg": "ok"})
 
 
 class FileDemoViewSet(viewsets.ModelViewSet):

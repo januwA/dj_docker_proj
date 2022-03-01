@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     "base",
 ]
 
+
+if DEBUG:
+    INSTALLED_APPS.append("corsheaders")  # 处理 Cors
+
 # DRF 配置
 # https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
@@ -111,6 +115,7 @@ MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,6 +125,10 @@ MIDDLEWARE = [
     # 缓存整个站点
     'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+if DEBUG:  
+    # Cors 中间件
+    MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'),
+                      "corsheaders.middleware.CorsMiddleware")
 
 ROOT_URLCONF = 'proj.urls'
 
@@ -277,6 +286,11 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'sessions'
 # 是否在用户关闭浏览器时结束会话
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+if DEBUG:
+    # 在debug模式下，任何地址都能请求接口
+    CORS_ALLOW_ALL_ORIGINS = True
 
 if DEBUG:
     LOGGING = {
