@@ -117,7 +117,10 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    
+    # 不想要 CSRF 验证,可以注释掉这个中间件
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

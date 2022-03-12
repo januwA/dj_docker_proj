@@ -19,6 +19,7 @@ urlpatterns = [
     re_path(r'celery_task_demo/?', views.celery_task_demo,
             name='celery_task_demo'),
     re_path(r'errlog/?', views.errlog, name='errlog'),
+    re_path(r'upload/?', views.upload_view, name='upload'),
     re_path(r'chat/?', include([
         re_path(r'global_send/?', views.chat_global_send,
                 name='chat_global_send'),

@@ -91,6 +91,11 @@ def errlog(request: Request):
     logger.error('记录错误消息')
     return JsonResponse({"msg": "ok"})
 
+def upload_view(request: Request):
+    print(request.POST)
+    print(request.FILES)
+    return JsonResponse({"msg": "ok"})
+
 
 class FileDemoViewSet(viewsets.ModelViewSet):
     queryset = FileDemo.objects.all()
