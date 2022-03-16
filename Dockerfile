@@ -10,7 +10,7 @@ COPY ./proj/* /proj/
 
 # 创建镜像时执行
 RUN python -m pip install --upgrade pip
-RUN pip install -r /proj/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install -r /proj/requirements.txt
 
 COPY ./scripts /scripts
 RUN chmod 777 /scripts/*
