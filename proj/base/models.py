@@ -31,9 +31,12 @@ class FileDemo(models.Model):
 
 class MyUserManager(UserManager):
 
-    def _create_user(self, username, email=None, password=None, **extra_fields):
-        if not email:
-            raise ValueError("The given email must be set")
+    def _create_user(self, username, email, password, **extra_fields):
+        
+        # 在这里判断必填字段
+        if not username:
+            raise ValueError("The given username must be set")
+
         email = self.normalize_email(email)
 
         GlobalUserModel = apps.get_model(
@@ -67,7 +70,7 @@ class User(AbstractUser):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'username'
     # 创建时的必选字段
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = []
 
     # 如果将邮箱设置为登录名，必须添加唯一限制
     # email = models.EmailField(
