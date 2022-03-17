@@ -5,7 +5,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -111,13 +110,13 @@ SIMPLE_JWT = {
 # 中间件
 MIDDLEWARE = [
     # 缓存整个站点
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     'django.middleware.common.CommonMiddleware',
-    
+
     # 不想要 CSRF 验证,可以注释掉这个中间件
     # 'django.middleware.csrf.CsrfViewMiddleware',
 
@@ -126,9 +125,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # 缓存整个站点
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
-if DEBUG:  
+if DEBUG:
     # Cors 中间件
     MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'),
                       "corsheaders.middleware.CorsMiddleware")
@@ -196,12 +195,10 @@ CACHES = {
         'VERSION': 1,
     }
 }
-# 缓存中间件使用哪个缓存
-CACHE_MIDDLEWARE_ALIAS = 'default'
-# 缓存中间件缓存页面的过期时间
-CACHE_MIDDLEWARE_SECONDS = timedelta(minutes=6).seconds
+CACHE_MIDDLEWARE_ALIAS = 'default'  # 缓存中间件使用哪个缓存
+CACHE_MIDDLEWARE_SECONDS = timedelta(minutes=6).seconds  # 缓存中间件缓存页面的过期时间
 
-# ws 配置
+# WebSocket 配置
 # https://channels.readthedocs.io/en/stable/topics/channel_layers.html#redis-channel-layer
 CHANNEL_LAYERS = {
     'default': {
@@ -244,24 +241,23 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# 静态文件管理 (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+# STATICFILES_DIRS 和 STATIC_ROOT 不能同时存在
+# STATICFILES_DIRS 配置来至 staticfiles 应用程序，只能在DEBUG模式中使用
 
 STATIC_URL = 'djstatic/'
 STATIC_DIR = os.path.join(BASE_DIR, STATIC_URL)
-
-# STATICFILES_DIRS 和 STATIC_ROOT 不能同时存在
-# STATICFILES_DIRS 配置来至 staticfiles 应用程序，只能在DEBUG模式中使用
 if DEBUG:
     STATICFILES_DIRS = [STATIC_DIR]
 else:
     STATIC_ROOT = STATIC_DIR
-os.makedirs(STATIC_DIR, exist_ok=True)
+os.makedirs(STATIC_DIR, exist_ok=True)  # 不存在时创建目录
 
 # 用户上传的文件
 MEDIA_URL = 'djmedia/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
-os.makedirs(MEDIA_ROOT, exist_ok=True)
+os.makedirs(MEDIA_ROOT, exist_ok=True)  # 不存在时创建目录
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -271,6 +267,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 自定义用户模型
 AUTH_USER_MODEL = "base.User"
 
+# 非斜线结尾的uri不进行重定向
 APPEND_SLASH = False
 
 # 邮箱配置
@@ -282,19 +279,29 @@ EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_TLS = True
 
+# 使用 sessions
+# https://docs.djangoproject.com/zh-hans/4.0/topics/http/sessions/
+# https://docs.djangoproject.com/zh-hans/4.0/ref/settings/#sessions
 
-# 控制Django存储sessions数据的地方
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-# 选择要使用的缓存
-SESSION_CACHE_ALIAS = 'sessions'
-# 是否在用户关闭浏览器时结束会话
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache' # 储存引擎
+# SESSION_CACHE_ALIAS = 'sessions' # 选择要使用的缓存
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  # 储存引擎 基于cookie
+SESSION_COOKIE_HTTPONLY = True  # 对Session cookie 使用 HttpOnly 标志
+SESSION_COOKIE_SECURE = not DEBUG  # 浏览器可以确保 cookie 只在 HTTPS 连接下发送
+SESSION_COOKIE_AGE = 1209600  # 会话 cookie 的寿命，(2周，以秒为单位)
+SESSION_COOKIE_NAME = 'sessionid'  # 会话的 cookie 的名称
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 用户关闭浏览器时结束会话
+# 序列化Session数据的序列化器类
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
+# drf 跨域配置
+# https://www.django-rest-framework.org/topics/ajax-csrf-cors/#cors
 if DEBUG:
     # 在debug模式下，任何地址都能请求接口
     CORS_ALLOW_ALL_ORIGINS = True
 
+# 日志配置
 if DEBUG:
     LOGGING = {
         'version': 1,                       # dictConfig 格式版本

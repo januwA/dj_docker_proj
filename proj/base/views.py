@@ -66,7 +66,7 @@ def celery_task_demo(request):
     return HttpResponse('ok')
 
 
-def chat_index(request):
+def chat_index(request: HttpRequest):
     return render(request, 'base/index.html')
 
 

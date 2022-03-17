@@ -32,7 +32,7 @@ class FileDemo(models.Model):
 class MyUserManager(UserManager):
 
     def _create_user(self, username, email, password, **extra_fields):
-        
+
         # 在这里判断必填字段
         if not username:
             raise ValueError("The given username must be set")
@@ -42,7 +42,7 @@ class MyUserManager(UserManager):
         GlobalUserModel = apps.get_model(
             self.model._meta.app_label, self.model._meta.object_name)
         username = GlobalUserModel.normalize_username(username)
-        
+
         # 创建时必须初始化 REQUIRED_FIELDS 中的字段
         user = self.model(username=username, email=email, **extra_fields)
         user.password = make_password(password)
