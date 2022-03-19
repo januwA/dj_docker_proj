@@ -1,5 +1,6 @@
 import datetime
 import uuid
+import os
 
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
@@ -11,8 +12,12 @@ from django.contrib.auth.models import AbstractUser, UserManager
 
 def my_upload_to(instance, filename):
     uid = uuid.uuid4().hex
-    ext = filename.split('.')[-1]
-    return datetime.datetime.now().strftime(f'uploads/%Y/%m/%d/{uid}.{ext}')
+
+    # a.txt => '.txt'
+    # a     => ''
+    # .txt  => ''
+    ext = os.path.splitext(filename)
+    return datetime.datetime.now().strftime(f'uploads/%Y/%m/%d/{uid}{ext}')
 
 
 class FileDemo(models.Model):
@@ -67,6 +72,8 @@ class MyUserManager(UserManager):
 
 
 class User(AbstractUser):
+    phone = models.CharField('手机号', max_length=11, validators=[],
+                             null=True, blank=True, unique=True)
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'username'
     # 创建时的必选字段
