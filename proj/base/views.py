@@ -1,10 +1,15 @@
 import logging
+from asgiref.sync import async_to_sync
+
+from proj.tasks import add
+
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth.models import update_last_login
-from proj.tasks import add
-from asgiref.sync import async_to_sync
 from django.shortcuts import render, HttpResponse
+from django.db.models import *
+from django.db.models.functions import *
+
 from channels.layers import get_channel_layer
 
 from rest_framework import viewsets
@@ -14,8 +19,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.settings import api_settings as sjwt_settings
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import FileDemo
-from .serializers import FileDemoSerializer
+from .models import *
+from .serializers import *
 
 # 指定记录器发送日志消息
 logger = logging.getLogger('django')
@@ -98,6 +103,11 @@ def upload_view(request: Request):
     return JsonResponse({"msg": "ok"})
 
 
-class FileDemoViewSet(viewsets.ModelViewSet):
-    queryset = FileDemo.objects.all()
-    serializer_class = FileDemoSerializer
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.values('id', 'name', 'auther', 'auther__username', auther_name=F('auther__username'))
+    serializer_class = BookSerializer
+
+
+class PublisherViewSet(viewsets.ModelViewSet):
+    queryset = Publisher.objects.annotate(num_books=Count('books'))
+    serializer_class = PublisherSerializer

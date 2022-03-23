@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from . import models
+from .models import *
 
 
 @admin.register(get_user_model())
@@ -13,9 +13,17 @@ class UserAdmin(admin.ModelAdmin):
     show_full_result_count = True
 
 
-@admin.register(models.FileDemo)
-class FileDemoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'file', 'img']
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'img']
+
+    class Meta:
+        pass
+
+
+@admin.register(Publisher)
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
 
     class Meta:
         pass

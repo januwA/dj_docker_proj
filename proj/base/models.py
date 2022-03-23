@@ -1,37 +1,9 @@
-import datetime
-import uuid
-import os
-
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
 from django.contrib import admin
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
-
-
-def my_upload_to(instance, filename):
-    uid = uuid.uuid4().hex
-
-    # a.txt => '.txt'
-    # a     => ''
-    # .txt  => ''
-    ext = os.path.splitext(filename)
-    return datetime.datetime.now().strftime(f'uploads/%Y/%m/%d/{uid}{ext}')
-
-
-class FileDemo(models.Model):
-    file = models.FileField(
-        '文件', upload_to=my_upload_to, null=True, blank=True)
-    img = models.ImageField(
-        '图片', upload_to=my_upload_to, width_field='image_width', height_field='image_height', null=True, blank=True)
-    image_height = models.PositiveSmallIntegerField(
-        null=True, blank=True, editable=False, default=100)
-    image_width = models.PositiveSmallIntegerField(
-        null=True, blank=True, editable=False, default=100)
-
-    create_at = models.DateTimeField(default=timezone.now)
-    update_at = models.DateTimeField(auto_now=True)
 
 
 class MyUserManager(UserManager):
@@ -72,6 +44,7 @@ class MyUserManager(UserManager):
 
 
 class User(AbstractUser):
+    # 手机号也有也能是16位的
     phone = models.CharField('手机号', max_length=11, validators=[],
                              null=True, blank=True, unique=True)
     EMAIL_FIELD = 'email'
@@ -98,8 +71,31 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         verbose_name = "用户"
-        verbose_name_plural = "用户列表"
+        verbose_name_plural = "用户"
         ordering = ["id"]
 
     def __str__(self) -> str:
         return self.get_username()
+
+
+class Publisher(models.Model):
+    name = models.CharField('出版商', max_length=20, db_index=True)
+    create_at = models.DateTimeField(default=timezone.now)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Book(models.Model):
+    auther = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='作者', related_name='books')
+    publishers = models.ManyToManyField(Publisher, verbose_name='出版商哪些', related_name='books')
+    name = models.CharField('书名', max_length=20, db_index=True)
+    img = models.ImageField(
+        '封面', upload_to=f'uploads/%Y/%m/%d/', null=True, blank=True)
+    create_at = models.DateTimeField(default=timezone.now)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.name

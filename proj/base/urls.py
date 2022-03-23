@@ -1,14 +1,13 @@
 from django.urls import re_path, include
 from rest_framework import routers
 
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from . import views
 
 router = routers.SimpleRouter(trailing_slash=False)
-router.register(r"files/?", views.FileDemoViewSet)
+router.register(r"book", views.BookViewSet)
+router.register(r"publisher", views.PublisherViewSet)
 
 urlpatterns = [
     re_path(r"token/?", views.MyTokenObtainPairView.as_view(),
