@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth import get_user_model
 
 
 class MyUserManager(UserManager):
@@ -89,7 +90,7 @@ class Publisher(models.Model):
 
 class Book(models.Model):
     auther = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='作者', related_name='books')
+        get_user_model(), on_delete=models.CASCADE, verbose_name='作者', related_name='books')
     publishers = models.ManyToManyField(Publisher, verbose_name='出版商哪些', related_name='books')
     name = models.CharField('书名', max_length=20, db_index=True)
     img = models.ImageField(
